@@ -919,6 +919,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
 
+  // Disable backend calls completely
+  window.fetch = function() {
+    console.log("Backend disabled");
+    return Promise.resolve({
+      json: () => Promise.resolve({ success: true })
+    });
+  };
+
+  // Form handling (demo mode)
+  const form = document.querySelector("form");
+
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      form.style.display = "none";
+
+      const msg = document.createElement("div");
+      msg.innerHTML = "<h2 style='color:green;'>✅ Submitted Successfully</h2>";
+
+      form.parentNode.appendChild(msg);
+    });
+  }
+
+});
+</script>
 </body>
 </html>
