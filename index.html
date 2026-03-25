@@ -910,7 +910,7 @@ async function submitForm() {
   }
 
   try {
-    const res = await fetch("https://wullar-child-care-centre.onrender.com/submit", {
+    const res = await fetch("https://127.0.0.1:5500/submit", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
