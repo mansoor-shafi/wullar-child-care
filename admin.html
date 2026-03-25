@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
+<style>
+body {
+  font-family: Arial;
+  background: #f5f5f5;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #2a7c6f;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+th {
+  background: #2a7c6f;
+  color: white;
+}
+
+tr:hover {
+  background: #f1f1f1;
+}
+
+button {
+  padding: 6px 12px;
+  background: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>📊 Admissions Dashboard</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Child Name</th>
+      <th>Parent</th>
+      <th>Phone</th>
+      <th>Age</th>
+     <th>Message</th>
+     <th>Action</th>
+    </tr>
+  </thead>
+  <tbody id="tableBody">
+  </tbody>
+</table>
+
+<script>
+if (localStorage.getItem("loggedIn") !== "true") {
+  window.location.href = "login.html";
+}
+async function loadData() {
+  const res = await fetch("http://127.0.0.1:5000/students");
+  const data = await res.json();
+
+  const table = document.getElementById("tableBody");
+  table.innerHTML = "";
+
+  data.forEach(student => {
+    table.innerHTML += `
+      <tr>
+        <td>${student.id}</td>
+        <td>${student.child_name}</td>
+        <td>${student.parent_name}</td>
+        <td>${student.phone}</td>
+        <td>${student.age}</td>
+        <td>${student.message}</td>
+        <td>
+          <button onclick="deleteStudent(${student.id})">Delete</button>
+        </td>
+        </tr>
+    `;
+  });
+}
+async function deleteStudent(id) {
+  if (!confirm("Are you sure?")) return;
+
+  await fetch(`http://127.0.0.1:5000/delete/${id}`, {
+    method: "DELETE"
+  });
+
+  loadData(); // refresh table
+}
+loadData();
+</script>
+
+</body>
+</html>
